@@ -4,8 +4,30 @@ const router = express.Router();
 const mysqlConnection  = require('../database.js');
 
 // GET all usuarios
-router.get('/productos', (req, res) => {
-  mysqlConnection.query('SELECT * FROM producto', (err, rows, fields) => {
+router.get('/inventario', (req, res) => {
+  mysqlConnection.query('SELECT * FROM inventarioe', (err, rows, fields) => {
+    if(!err) {
+      res.json(rows);
+    } else {
+      console.log(err);
+    }
+  });  
+});
+
+//Get disponibles
+router.get('/inventarioDisponible', (req, res) => {
+  mysqlConnection.query('select * from inventarioe where tipoEquipo="EP" and estado=1', (err, rows, fields) => {
+    if(!err) {
+      res.json(rows);
+    } else {
+      console.log(err);
+    }
+  });  
+});
+
+//Get dañados
+router.get('/inventarioDanado', (req, res) => {
+  mysqlConnection.query('select * from inventarioe where tipoEquipo="ED" and estado=1', (err, rows, fields) => {
     if(!err) {
       res.json(rows);
     } else {
@@ -29,7 +51,7 @@ router.get('/vistaProductos', (req, res) => {
 router.get('/buscarProducto/:id', (req, res) => {
   var { id } = req.params;
   id = '%'+id+'%';
-  mysqlConnection.query('SELECT * FROM producto WHERE nom_producto LIKE ?', [id], (err, rows, fields) => {
+  mysqlConnection.query('SELECT * FROM inventarioe WHERE nomEquipo LIKE ?', [id], (err, rows, fields) => {
     if (!err) {
       res.json(rows);
     } else {
@@ -41,9 +63,9 @@ router.get('/buscarProducto/:id', (req, res) => {
 // DELETE An usuario
 router.delete('/eliminarProducto/:id', (req, res) => {
   const { id } = req.params;
-  mysqlConnection.query('DELETE FROM producto WHERE id_producto = ?', [id], (err, rows, fields) => {
+  mysqlConnection.query('DELETE FROM inventarioe WHERE id_equipo = ?', [id], (err, rows, fields) => {
     if(!err) {
-      res.json({status: 'Employee Deleted'});
+      res.json({status: 'equipo eliminado'});
     } else {
       console.log(err);
     }
