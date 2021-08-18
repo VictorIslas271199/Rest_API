@@ -48,7 +48,7 @@ router.get('/vistaProductos', (req, res) => {
 });
 
 // GET An usuario
-router.get('/buscarProducto/:id', (req, res) => {
+router.get('        :id', (req, res) => {
   var { id } = req.params;
   id = '%'+id+'%';
   mysqlConnection.query('SELECT * FROM inventarioe WHERE id_equipo LIKE ?', [id], (err, rows, fields) => {
